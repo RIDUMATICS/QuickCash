@@ -1,6 +1,6 @@
 import { transports, createLogger, format, addColors } from 'winston';
 import 'winston-mongodb';
-import config from '.';
+import config from '../config';
 
 const { combine, timestamp, errors, json, printf, colorize } = format;
 
@@ -23,14 +23,14 @@ addColors({
 //
 // If we're in production then log error to mongoDB database:
 //
-const logger = createLogger({
+const Logger = createLogger({
   levels,
   transports: [
     new transports.MongoDB({
       level: 'error',
       db: config.mongoURI,
       options: { useUnifiedTopology: true },
-      collection: 'quickcash',
+      collection: 'logs',
       format: combine(timestamp(), errors(), json()),
     }),
   ],
@@ -41,7 +41,7 @@ const logger = createLogger({
 // `${info.level}: ${info.message}`
 //
 if (config.NODE_ENV !== 'production') {
-  logger.add(
+  Logger.add(
     new transports.Console({
       level: 'debug',
       handleExceptions: true,
@@ -54,4 +54,4 @@ if (config.NODE_ENV !== 'production') {
   );
 }
 
-export default logger;
+export default Logger;

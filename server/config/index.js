@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-  port: process.env.PORT,
+  port: process.env.PORT || 4200,
+  secret: process.env.SECRET || 'secret',
   mongoURI: process.env.MONGO_URI,
   NODE_ENV: process.env.NODE_ENV,
 };

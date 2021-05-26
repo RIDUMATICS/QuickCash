@@ -2,9 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from './middleware/morganMiddleware';
-// import routes from './routes';
+import routes from './routes';
+import { CustomError, Logger } from './utils';
+import { errors, isCelebrateError } from 'celebrate';
+import responseMiddleware from './middleware/responseMiddleware';
 
 const app = express();
+
+app.response.say = () => {
+  console.log("okay i'm talking");
+};
 
 // Enable Cross Origin Resource Sharing to all origins by default
 app.use(cors());
@@ -15,47 +22,45 @@ app.use(helmet());
 // Middleware that transforms the raw string of req.body into json
 app.use(express.json());
 
+// Middleware that add new methods (error & success) to res object
+app.use(responseMiddleware);
+
 app.use(morgan);
 
-app.get('/', (req, res) => {
-  res.status(200).json({
-    'project name': 'QuickCash',
-    version: '1.0.0',
-    author: 'Onikoyi Ridwan',
-    email: 'onikoyiridwan@gmail.com',
-    status: 'success',
-  });
-});
-
 // Load API routes
-// app.use('/api/v1', routes());
+app.use('/api/v1', routes());
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
+  const err = new CustomError('Not Found', 404);
   next(err);
 });
 
-/// error handlers
+/// error handlers for celebrate validation
 app.use((err, req, res, next) => {
-  /**
-   * Handle 401 thrown by express-jwt library
-   */
-  if (err.name === 'UnauthorizedError') {
-    return res.status(err.status).send({ message: err.message }).end();
+  // If this isn't a Celebrate error, send it to the next error handler
+  if (!isCelebrateError(err)) {
+    return next(err);
   }
-  return next(err);
+
+  // converting map to object
+  const obj = { type: 'validation failed', path: '', message: [] };
+
+  for (let [key, value] of err.details) {
+    obj['path'] = key;
+    obj['message'] = value.details.map(({ message }) => message);
+  }
+  res.error(400, obj);
 });
 
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    errors: {
-      message: err.message,
-    },
-  });
+  const status = err.status || 500;
+
+  if (status >= 500) {
+    // If  error is 5xx it should log the error to database
+    Logger.error(err.message, { status });
+  }
+  res.error(status, err.message);
 });
 
 export default app;
