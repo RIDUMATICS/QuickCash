@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node ./build/index.js",
+    "start": "npm run build && node ./build/app.js",
     "start:dev": "nodemon --exec babel-node ./server/app.js",
     "build": "npm run clean && npm run build-babel",
     "clean": "rm -rf build && mkdir build",
-    "build-babel": "babel -d ./build ./server/app.js -s"
+    "build-babel": "babel -d ./build ./server -s"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +29,7 @@
   "dependencies": {
     "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.3",
+    "@mongoosejs/double": "^0.2.0",
     "bcrypt": "^5.0.1",
     "celebrate": "^14.0.0",
     "cors": "^2.8.5",
