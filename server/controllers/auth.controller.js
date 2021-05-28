@@ -4,16 +4,16 @@ import { CustomError } from '../utils';
 export default class AuthController {
   static async createUser(req, res, next) {
     try {
-      const { name, password } = req.body;
-
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email: req.body.email });
 
       if (user) {
         // throw error email is unique
         throw new CustomError('Email has already been taken.', 409);
       }
 
-      let newUser = new User({ name, email, password });
+      let newUser = new User(req.body);
+      // hash user password
+      newUser.hashPassword(req.body.password);
       newUser = await newUser.save();
       const token = newUser.generateJWT();
 

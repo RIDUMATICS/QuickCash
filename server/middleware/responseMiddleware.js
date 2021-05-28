@@ -1,9 +1,8 @@
 export default (req, res, next) => {
   /**
-   * Error Handler
-   *
-   * Usage:
-   * return res.error(status, error);
+   * @description API response for Error e.g. 400, 404
+   * @param{int} status
+   * @param {object} error
    *
    * e.g.:
    * ```
@@ -18,10 +17,9 @@ export default (req, res, next) => {
   };
 
   /**
-   * Success Handler
-   *
-   * Usage:
-   * return res.success(status, data);
+   * @description API response for Success e.g. 200, 201
+   * @param{int} status
+   * @param {object} data
    *
    * e.g.:
    * ```

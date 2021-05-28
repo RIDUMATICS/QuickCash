@@ -1,17 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import passport from 'passport';
 import morgan from './middleware/morganMiddleware';
 import routes from './routes';
 import { CustomError, Logger } from './utils';
-import { errors, isCelebrateError } from 'celebrate';
+import { isCelebrateError } from 'celebrate';
 import responseMiddleware from './middleware/responseMiddleware';
+import passportConfig from './config/passport';
 
 const app = express();
-
-app.response.say = () => {
-  console.log("okay i'm talking");
-};
 
 // Enable Cross Origin Resource Sharing to all origins by default
 app.use(cors());
@@ -26,6 +24,10 @@ app.use(express.json());
 app.use(responseMiddleware);
 
 app.use(morgan);
+
+app.use(passport.initialize());
+
+passportConfig(passport);
 
 // Load API routes
 app.use('/api/v1', routes());
@@ -58,8 +60,9 @@ app.use((err, req, res, next) => {
 
   if (status >= 500) {
     // If  error is 5xx it should log the error to database
-    Logger.error(err.message, { status });
+    Logger.error(err.message, { status, stack: err.stack });
   }
+
   res.error(status, err.message);
 });
 
