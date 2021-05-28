@@ -15,8 +15,13 @@ const UserSchema = new Schema(
       lowercase: true,
       unique: true,
       index: true,
+      required: true,
     },
-    password: String,
+    address: {
+      type: String,
+      required: true,
+    },
+    password: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -32,15 +37,10 @@ UserSchema.methods.generateJWT = function () {
   });
 };
 
-UserSchema.pre('save', async function (next) {
-  if (!this.password) return next;
-
-  const user = this;
-  const hash = await bcrypt.hash(this.password, 10);
-
+UserSchema.methods.hashPassword = function (plainPassword) {
+  const hash = bcrypt.hashSync(plainPassword, 10);
   this.password = hash;
-  next();
-});
+};
 
 UserSchema.methods.toJSON = function () {
   const user = this.toObject();
@@ -48,5 +48,5 @@ UserSchema.methods.toJSON = function () {
   return user;
 };
 
-// export userschema
+// export UserSchema
 export default model('User', UserSchema);
