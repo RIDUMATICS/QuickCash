@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../../config';
+import { PortfolioSchema } from './Portfolio';
 
 const UserSchema = new Schema(
   {
@@ -22,6 +23,7 @@ const UserSchema = new Schema(
       required: true,
     },
     password: { type: String, required: true },
+    portfolios: [PortfolioSchema],
   },
   { timestamps: true }
 );
@@ -42,9 +44,14 @@ UserSchema.methods.hashPassword = function (plainPassword) {
   this.password = hash;
 };
 
+UserSchema.methods.getPortfolios = function () {
+  return this.portfolios;
+};
+
 UserSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
+  delete user.portfolios;
   return user;
 };
 

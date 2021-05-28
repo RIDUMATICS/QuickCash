@@ -1,3 +1,4 @@
+import Portfolio from '../database/models/Portfolio';
 import User from '../database/models/User';
 import { CustomError } from '../utils';
 
@@ -45,6 +46,32 @@ export default class UserController {
 
       // if user does not exits
       throw new CustomError('User not found', 404);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPortfolioPos(req, res, next) {
+    try {
+      // get user portfolio positions
+      const portfolios = await req.user.getPortfolios();
+
+      res.success(200, { portfolios });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPortfolioValue(req, res, next) {
+    try {
+      const portfolios = await req.user.getPortfolios();
+
+      // portfolio value is cumulative of all equityValue(totalQuantity * pricePerShare)
+      const portfolioValue = portfolios.reduce((total, portfolio) => {
+        return total + portfolio.equityValue;
+      }, 0);
+
+      res.success(200, { portfolioValue });
     } catch (error) {
       next(error);
     }
