@@ -60,6 +60,7 @@ app.use((err, req, res, next) => {
 
   if (status >= 500) {
     // If  error is 5xx it should log the error to database
+    console.log(err.stack);
     Logger.error(err.message, { status, stack: err.stack });
   }
 

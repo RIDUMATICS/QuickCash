@@ -10,6 +10,10 @@ export const updateUserSchema = {
     address: Joi.string().messages({
       'string.base': 'enter a valid address',
     }),
+    email: Joi.string().lowercase().email().messages({
+      'string.base': 'enter a valid email',
+      'string.email': 'enter a valid email',
+    }),
   },
 };
 

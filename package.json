@@ -41,6 +41,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "paystack": "^2.0.1",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7"
   }

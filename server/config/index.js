@@ -8,4 +8,5 @@ export default {
   secret: process.env.SECRET || 'secret',
   mongoURI: process.env.MONGO_URI,
   NODE_ENV: process.env.NODE_ENV,
+  PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
 };

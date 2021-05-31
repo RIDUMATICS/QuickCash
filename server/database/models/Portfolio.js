@@ -6,7 +6,6 @@ export const PortfolioSchema = new Schema(
     symbol: {
       type: String,
       required: true,
-      unique: true,
     },
     totalQuantity: {
       type: Double,

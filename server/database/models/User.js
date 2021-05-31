@@ -33,7 +33,7 @@ UserSchema.methods.validatePassword = function (plainPassword) {
 };
 
 UserSchema.methods.generateJWT = function () {
-  const payload = { id: this._id, name: this.name };
+  const payload = { id: this._id, name: this.name, email: this.email };
   return jwt.sign(payload, config.secret, {
     expiresIn: '24h',
   });
@@ -46,6 +46,15 @@ UserSchema.methods.hashPassword = function (plainPassword) {
 
 UserSchema.methods.getPortfolios = function () {
   return this.portfolios;
+};
+
+UserSchema.methods.getPortfolioValue = function () {
+  // portfolio value is cumulative of all equityValue(totalQuantity * pricePerShare)
+  const portfolioValue = this.portfolios.reduce((total, portfolio) => {
+    return total + portfolio.equityValue;
+  }, 0);
+
+  return portfolioValue;
 };
 
 UserSchema.methods.toJSON = function () {
