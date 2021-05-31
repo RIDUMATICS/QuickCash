@@ -3,9 +3,25 @@ import User from '../database/models/User';
 import { CustomError } from '../utils';
 
 export default class UserController {
+  /**
+   * @param {object} request express request object
+   * @param {object} response express request object
+   * @returns {json} json
+   * @memberof UserController
+   */
   static async updateUser(req, res, next) {
     try {
       const { _id } = req.user;
+
+      // check if new email is available
+      if (req.body.email) {
+        const user = await User.findOne({ email: req.body.email });
+        // if user exits with same email
+        if (user) {
+          throw new CustomError('Email is not available', 409);
+        }
+      }
+
       const user = await User.findByIdAndUpdate(_id, req.body, { new: true });
 
       // if user exits
@@ -62,14 +78,9 @@ export default class UserController {
     }
   }
 
-  static async getPortfolioValue(req, res, next) {
+  static getPortfolioValue(req, res, next) {
     try {
-      const portfolios = await req.user.getPortfolios();
-
-      // portfolio value is cumulative of all equityValue(totalQuantity * pricePerShare)
-      const portfolioValue = portfolios.reduce((total, portfolio) => {
-        return total + portfolio.equityValue;
-      }, 0);
+      const portfolioValue = req.user.getPortfolioValue();
 
       res.success(200, { portfolioValue });
     } catch (error) {

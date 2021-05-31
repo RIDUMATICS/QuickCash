@@ -2,7 +2,6 @@ import { celebrate } from 'celebrate';
 import { Router } from 'express';
 import passport from 'passport';
 import UserController from '../controllers/user.controller';
-import User from '../database/models/User';
 import {
   updatePasswordSchema,
   updateUserSchema,
@@ -13,7 +12,7 @@ const route = Router();
 const opt = { abortEarly: false }; // Joi validation options
 
 export default (app) => {
-  app.use('/', route);
+  app.use('/user', route);
 
   route.patch(
     '/details',
