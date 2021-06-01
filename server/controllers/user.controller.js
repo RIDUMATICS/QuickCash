@@ -4,10 +4,11 @@ import { CustomError } from '../utils';
 
 export default class UserController {
   /**
-   * @param {object} request express request object
-   * @param {object} response express request object
-   * @returns {json} json
-   * @memberof UserController
+   * @method updateUser
+   * @description User can update his personal information
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
    */
   static async updateUser(req, res, next) {
     try {
@@ -36,6 +37,13 @@ export default class UserController {
     }
   }
 
+  /**
+   * @method updateUser
+   * @description User can update password
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
   static async updatePassword(req, res, next) {
     try {
       const { _id } = req.user;
@@ -67,6 +75,13 @@ export default class UserController {
     }
   }
 
+  /**
+   * @method updateUser
+   * @description User can pull his portfolio positions
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
   static async getPortfolioPos(req, res, next) {
     try {
       // get user portfolio positions
@@ -78,6 +93,13 @@ export default class UserController {
     }
   }
 
+  /**
+   * @method updateUser
+   * @description User can pull his portfolio value
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
   static getPortfolioValue(req, res, next) {
     try {
       const portfolioValue = req.user.getPortfolioValue();

@@ -2,6 +2,7 @@ import { celebrate } from 'celebrate';
 import { Router } from 'express';
 import passport from 'passport';
 import LoanController from '../controllers/loan.controller';
+import RepaymentController from '../controllers/repayment.controller';
 import {
   createLoanSchema,
   getLoansSchema,
@@ -23,6 +24,7 @@ export default (app) => {
 
   route.post(
     '/',
+    celebrate(createLoanSchema, opt),
     passport.authenticate('jwt', { session: false }),
     LoanController.createLoan
   );
@@ -38,5 +40,17 @@ export default (app) => {
     '/:id',
     passport.authenticate('jwt', { session: false }),
     LoanController.getLoan
+  );
+
+  route.post(
+    '/repayments/verify',
+    passport.authenticate('jwt', { session: false }),
+    RepaymentController.verifyPayment
+  );
+
+  route.post(
+    '/repayments/:id',
+    passport.authenticate('jwt', { session: false }),
+    RepaymentController.postRepayment
   );
 };

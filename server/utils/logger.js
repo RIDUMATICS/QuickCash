@@ -2,7 +2,7 @@ import { transports, createLogger, format, addColors } from 'winston';
 import 'winston-mongodb';
 import config from '../config';
 
-const { combine, timestamp, errors, json, printf, colorize } = format;
+const { combine, timestamp, errors, json, printf, colorize, metadata } = format;
 
 const levels = {
   error: 0,
@@ -31,7 +31,7 @@ const Logger = createLogger({
       db: config.mongoURI,
       options: { useUnifiedTopology: true },
       collection: 'logs',
-      format: combine(timestamp(), errors(), json()),
+      format: combine(timestamp(), errors({ stack: true }), metadata(), json()),
     }),
   ],
 });
@@ -48,7 +48,12 @@ if (config.NODE_ENV !== 'production') {
       json: false,
       format: combine(
         colorize({ all: true }),
-        printf((info) => `${info.level}: ${info.message}`)
+        metadata(),
+        errors({ stack: true }),
+        printf(({ level, message }) => {
+          // formating the log outcome
+          return `${level}: ${message}`;
+        })
       ),
     })
   );
