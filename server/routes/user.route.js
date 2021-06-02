@@ -39,5 +39,4 @@ export default (app) => {
     passport.authenticate('jwt', { session: false }),
     UserController.getPortfolioValue
   );
-  
 };
