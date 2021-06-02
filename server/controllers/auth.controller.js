@@ -2,6 +2,13 @@ import User from '../database/models/User';
 import { CustomError } from '../utils';
 
 export default class AuthController {
+  /**
+   * @method createUser
+   * @description User can create an account on this service
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
   static async createUser(req, res, next) {
     try {
       const user = await User.findOne({ email: req.body.email });
@@ -46,6 +53,13 @@ export default class AuthController {
     }
   }
 
+  /**
+   * @method logUser
+   * @description User can login on this service
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
   static async logUser(req, res, next) {
     try {
       const { email, password } = req.body;

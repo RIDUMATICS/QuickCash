@@ -58,6 +58,12 @@ LoanSchema.statics.calculateInterest = function (amount, tenor) {
   return interest;
 };
 
+LoanSchema.methods.toJSON = function () {
+  const loan = this.toObject();
+  delete loan.repayments;
+  return loan;
+};
+
 LoanSchema.pre('save', function (next) {
   // if it is a new Loan
   if (this.isNew) {

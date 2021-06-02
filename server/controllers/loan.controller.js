@@ -1,4 +1,5 @@
 import Loan from '../database/models/Loan';
+import Repayment from '../database/models/Repayment';
 import { CustomError } from '../utils';
 
 export default class LoanController {
@@ -50,13 +51,13 @@ export default class LoanController {
    */
   static async getLoans(req, res, next) {
     try {
-      const filter = { userId };
-      //user can filter loans []
-      if (req.query.repaid) {
+      const filter = { userId: req.user.id };
+
+      if (req.query.repaid !== undefined) {
         filter['repaid'] = req.query.repaid;
       }
-      const userId = req.user.id;
-      const loans = await Loan.find({ userId });
+
+      const loans = await Loan.find(filter);
       res.success(200, { loans });
     } catch (error) {
       next(error);
@@ -78,7 +79,8 @@ export default class LoanController {
       const loan = await Loan.findOne({ userId, _id });
 
       if (loan) {
-        return res.success(200, { loan });
+        const repayments = await Repayment.find({ loanId: _id });
+        return res.success(200, { ...loan.toJSON(), repayments });
       }
 
       throw new CustomError('Loan not found', 404);
@@ -96,8 +98,7 @@ export default class LoanController {
    */
   static async getProratedPayment(req, res, next) {
     try {
-      const amount = req.query.amount;
-      const tenor = req.query.tenor;
+      const { amount, tenor } = req.query;
 
       // calculate loan installment payment
       const installmentPayment = Loan.calculateInstallment(amount, tenor);
