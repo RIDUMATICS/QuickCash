@@ -20,20 +20,8 @@ addColors({
   debug: 'white',
 });
 
-//
-// If we're in production then log error to mongoDB database:
-//
 const Logger = createLogger({
   levels,
-  transports: [
-    new transports.MongoDB({
-      level: 'error',
-      db: config.mongoURI,
-      options: { useUnifiedTopology: true },
-      collection: 'logs',
-      format: combine(timestamp(), errors({ stack: true }), metadata(), json()),
-    }),
-  ],
 });
 
 //
@@ -55,6 +43,21 @@ if (config.NODE_ENV !== 'production') {
           return `${level}: ${message}`;
         })
       ),
+    })
+  );
+}
+
+//
+// If we're in production then log error to mongoDB database:
+//
+if (config.NODE_ENV == 'production') {
+  Logger.add(
+    new transports.MongoDB({
+      level: 'error',
+      db: config.DB_URL,
+      options: { useUnifiedTopology: true },
+      collection: 'logs',
+      format: combine(timestamp(), errors({ stack: true }), metadata(), json()),
     })
   );
 }
