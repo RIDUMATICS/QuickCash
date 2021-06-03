@@ -15,7 +15,7 @@ export default (app) => {
   app.use('/user', route);
 
   route.patch(
-    '/details',
+    '/',
     passport.authenticate('jwt', { session: false }),
     celebrate(updateUserSchema, opt),
     UserController.updateUser
