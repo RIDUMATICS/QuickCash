@@ -38,7 +38,7 @@ export default class UserController {
   }
 
   /**
-   * @method updateUser
+   * @method updatePassword
    * @description User can update password
    * @param {object} req - The Request Object
    * @param {object} res - The Response Object
@@ -76,7 +76,7 @@ export default class UserController {
   }
 
   /**
-   * @method updateUser
+   * @method getPortfolioPos
    * @description User can pull his portfolio positions
    * @param {object} req - The Request Object
    * @param {object} res - The Response Object
@@ -94,7 +94,7 @@ export default class UserController {
   }
 
   /**
-   * @method updateUser
+   * @method getPortfolioValue
    * @description User can pull his portfolio value
    * @param {object} req - The Request Object
    * @param {object} res - The Response Object

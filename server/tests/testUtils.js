@@ -1,13 +1,13 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from './test_server';
+import server from './test_server';
 
 chai.use(chaiHttp);
 
 const authenticateUser = async () => {
   return new Promise((resolve, reject) => {
     chai
-      .request(app)
+      .request(server)
       .post('/api/v1/auth/login')
       .send({
         email: 'John@doe.com',
