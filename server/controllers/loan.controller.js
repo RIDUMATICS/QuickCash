@@ -29,7 +29,7 @@ export default class LoanController {
       if (totalUnpaidAmount + newLoanTotal <= maxAmount) {
         let newLoan = new Loan({ userId, amount, tenor });
         newLoan = await newLoan.save();
-        return res.success(201, { Loan: newLoan });
+        return res.success(201, { loan: newLoan });
       }
 
       res.error(400, {
@@ -80,7 +80,7 @@ export default class LoanController {
 
       if (loan) {
         const repayments = await Repayment.find({ loanId: _id });
-        return res.success(200, { ...loan.toJSON(), repayments });
+        return res.success(200, { loan: { ...loan.toJSON(), repayments } });
       }
 
       throw new CustomError('Loan not found', 404);

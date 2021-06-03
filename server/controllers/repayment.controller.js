@@ -24,6 +24,7 @@ export default class RepaymentController {
         }
 
         const paidAmount = loan.installmentPayment.value;
+
         // payment using paystack
         const resp = await paystack.initialize({
           amount: paidAmount,
@@ -31,7 +32,7 @@ export default class RepaymentController {
           loanId,
         });
 
-        return res.success(201, { ...resp });
+        return res.success(200, { ...resp });
       }
 
       throw new CustomError('Loan not found', 404);
@@ -41,7 +42,7 @@ export default class RepaymentController {
   }
 
   /**
-   * @method postRepayment
+   * @method verifyPayment
    * @description - Verify paystack payment
    * @param {object} req - The Request Object
    * @param {object} res - The Response Object
@@ -74,7 +75,7 @@ export default class RepaymentController {
         }
       }
 
-      res.success(200, { message: gateway_response, repayment });
+      res.success(201, { message: gateway_response, repayment });
     } catch (error) {
       next(error);
     }

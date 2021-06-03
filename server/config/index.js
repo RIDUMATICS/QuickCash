@@ -10,5 +10,6 @@ export default {
   TESTDB_URL: process.env.TESTDB_URL,
   TEST_COLLECTION: process.env.TEST_COLLECTION,
   NODE_ENV: process.env.NODE_ENV,
-  PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
+  PAYSTACK_PROD_KEY: process.env.PAYSTACK_PROD_KEY, // for production
+  PAYSTACK_TEST_KEY: process.env.PAYSTACK_TEST_KEY, // for development and testing
 };

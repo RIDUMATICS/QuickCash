@@ -1,14 +1,10 @@
 language: node_js
 node_js:
   - 'stable'
-env:
-  global:
-    - TESTDB_URL=mongodb://localhost:27017/quickcash_test
 services:
   - mongodb
 before_script:
-  - sleep 15
-  - mongo quickcash_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - mongo quickcash_test
 script:
   - npm install
   - npm run test
