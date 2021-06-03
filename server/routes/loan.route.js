@@ -43,13 +43,13 @@ export default (app) => {
   );
 
   route.post(
-    '/repayments/verify',
+    '/repayment/verify',
     passport.authenticate('jwt', { session: false }),
     RepaymentController.verifyPayment
   );
 
   route.post(
-    '/repayments/:id',
+    '/repayment/:id',
     passport.authenticate('jwt', { session: false }),
     RepaymentController.postRepayment
   );
