@@ -45,14 +45,14 @@ app.use((err, req, res, next) => {
     return next(err);
   }
 
-  // converting map to object
-  const obj = { type: 'validation failed', path: '', message: [] };
+  // converting map to array
+  let messages = [];
 
-  for (let [key, value] of err.details) {
-    obj['path'] = key;
-    obj['message'] = value.details.map(({ message }) => message);
+  for (let value of err.details.values()) {
+    console.log(value.details);
+    messages = value.details.map(({ message }) => message);
   }
-  res.error(400, obj);
+  res.error(400, messages);
 });
 
 app.use((err, req, res, next) => {
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
     Logger.error(err.message, { status, stack: err.stack });
   }
 
-  res.error(status, err.message);
+  res.error(status, [err.message]);
 });
 
 export default app;

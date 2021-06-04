@@ -14,15 +14,6 @@ export default class UserController {
     try {
       const { _id } = req.user;
 
-      // check if new email is available
-      if (req.body.email) {
-        const user = await User.findOne({ email: req.body.email });
-        // if user exits with same email
-        if (user) {
-          throw new CustomError('Email is not available', 409);
-        }
-      }
-
       const user = await User.findByIdAndUpdate(_id, req.body, { new: true });
 
       // if user exits

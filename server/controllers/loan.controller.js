@@ -1,6 +1,8 @@
+import sendMail from '../config/email';
 import Loan from '../database/models/Loan';
 import Repayment from '../database/models/Repayment';
 import { CustomError } from '../utils';
+import messageTemplate from '../utils/messageTemplate';
 
 export default class LoanController {
   /**
@@ -29,14 +31,20 @@ export default class LoanController {
       if (totalUnpaidAmount + newLoanTotal <= maxAmount) {
         let newLoan = new Loan({ userId, amount, tenor });
         newLoan = await newLoan.save();
+        sendMail(
+          req.user.email,
+          'APPROVAL OF REQUEST FOR LOAN',
+          messageTemplate.loanApproval(newLoan)
+        );
         return res.success(201, { loan: newLoan });
       }
 
-      res.error(400, {
-        message: 'Exceeded maximum amount allowed',
-        totalUnpaidAmount,
-        newLoanTotal,
-      });
+      sendMail(
+        req.user.email,
+        'REJECTION OF REQUEST FOR LOAN',
+        messageTemplate.loanRejection()
+      );
+      throw new CustomError('Exceeded maximum amount allowed', 400);
     } catch (error) {
       next(error);
     }
