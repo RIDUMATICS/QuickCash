@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
     Logger.error(err.message, { status, stack: err.stack });
   }
 
-  res.error(status, [err.message]);
+  res.error(status, err.message);
 });
 
 export default app;

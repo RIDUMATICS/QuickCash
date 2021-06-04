@@ -36,23 +36,6 @@ describe('User Route', () => {
       });
   });
 
-  it('should throw an error if the user tries to update to existing email', (done) => {
-    chai
-      .request(server)
-      .patch('/api/v1/user')
-      .set('Authorization', token)
-      .send({
-        email: 'John@doe.com',
-      })
-      .end((err, res) => {
-        res.should.have.status(409);
-        res.body.should.be.a('object');
-        res.body.should.have.property('error').eql('Email is not available');
-
-        done();
-      });
-  });
-
   it('should update user password', (done) => {
     chai
       .request(server)

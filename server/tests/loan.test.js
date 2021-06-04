@@ -44,9 +44,8 @@ describe('Loan Route', () => {
       .end((err, res) => {
         res.should.have.status(400);
         res.body.should.be.a('object');
-        res.body.should.have.property('error').should.be.a('object');
-        res.body.error.should.have
-          .property('message')
+        res.body.should.have
+          .property('error')
           .eql('Exceeded maximum amount allowed');
         done();
       });
