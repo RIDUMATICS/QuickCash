@@ -19,7 +19,7 @@ const paystack = {
   initialize: async ({ amount, email, loanId }) => {
     try {
       // paystack charge amount is in kobo
-      amount = amount * 100;
+      amount = Math.round(amount * 100);
 
       const { data } = await axiosInstance.post('/initialize', {
         amount,
