@@ -13,3 +13,9 @@ UI templates for the application can be found on vercel [https://quickcash.verce
 ## Heroku App
 
 Application was deployed to Heroku. Use public URL [https://quickcash-api.herokuapp.com/](https://quickcash-api.herokuapp.com/).
+
+---
+
+## Documentation
+
+[https://documenter.getpostman.com/view/6765162/TzY4gb7n](https://documenter.getpostman.com/view/6765162/TzY4gb7n).
